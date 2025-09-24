@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch Làm Việc</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .form-col {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 10px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .filters {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .task-item {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #667eea;
+            cursor: move;
+            transition: all 0.3s;
+        }
+
+        .task-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .task-item.priority-high {
+            border-left-color: #dc3545;
+        }
+
+        .task-item.priority-medium {
+            border-left-color: #ffc107;
+        }
+
+        .task-item.priority-low {
+            border-left-color: #28a745;
+        }
+
+        .task-item.completed {
+            opacity: 0.7;
+            background: #f8f9fa;
+        }
+
+        .task-item.overdue {
+            border-left-color: #dc3545;
+            background: #fff5f5;
+        }
+
+        .task-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .task-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .task-title h3 {
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        .task-title.completed h3 {
+            text-decoration: line-through;
+            color: #666;
+        }
+
+        .priority-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .priority-high {
+            background: #fee;
+            color: #dc3545;
+        }
+
+        .priority-medium {
+            background: #fff8e1;
+            color: #f57c00;
+        }
+
+        .priority-low {
+            background: #e8f5e8;
+            color: #28a745;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .task-actions button {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .task-actions button:hover {
+            background: #f0f0f0;
+        }
+
+        .task-content {
+            margin: 10px 0;
+            color: #666;
+            margin-left: 45px;
+        }
+
+        .task-meta {
+            display: flex;
+            gap: 20px;
+            margin-left: 45px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .task-meta.overdue {
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            z-index: 1000;
+            animation: slideIn 0.5s ease;
+            max-width: 300px;
+        }
+
+        .notification.success {
+            background: #28a745;
+        }
+
+        .notification.error {
+            background: #dc3545;
+        }
+
+        .notification.warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .notification.info {
+            background: #17a2b8;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .empty-state .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .sortable-ghost {
+            opacity: 0.4;
+        }
+
+        .sortable-chosen {
+            transform: rotate(2deg);
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .task-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            
+            .task-actions {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📅 Lịch Làm Việc</h1>
+            <p>Quản lý công việc hiệu quả với thông báo tự động</p>
+        </div>
+
+        <!-- Add Task Form -->
+        <div class="card">
+            <h2>➕ Thêm Công Việc Mới</h2>
+            <form id="taskForm">
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="taskTitle">Tiêu đề *</label>
+                        <input type="text" id="taskTitle" required placeholder="Nhập tiêu đề công việc...">
+                    </div>
+                    <div class="form-col">
+                        <label for="taskPriority">Độ ưu tiên</label>
+                        <select id="taskPriority">
+                            <option value="low">Thấp</option>
+                            <option value="medium" selected>Trung bình</option>
+                            <option value="high">Cao</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="taskContent">Nội dung</label>
+                    <textarea id="taskContent" rows="3" placeholder="Mô tả chi tiết công việc..."></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="taskDate">Ngày *</label>
+                        <input type="date" id="taskDate" required>
+                    </div>
+                    <div class="form-col">
+                        <label for="taskTime">Giờ *</label>
+                        <input type="time" id="taskTime" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" id="submitBtn">➕ Thêm Công Việc</button>
+                    <button type="button" class="btn btn-secondary" id="cancelBtn" style="display: none;">❌ Hủy</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" style="color: #667eea;" id="totalTasks">0</div>
+                <div class="stat-label">Tổng công việc</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" style="color: #28a745;" id="completedTasks">0</div>
+                <div class="stat-label">Đã hoàn thành</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" style="color: #ffc107;" id="pendingTasks">0</div>
+                <div class="stat-label">Đang thực hiện</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" style="color: #dc3545;" id="overdueTasks">0</div>
+                <div class="stat-label">Quá hạn</div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="card">
+            <div class="filters">
+                <div>
+                    <label for="statusFilter">Lọc theo trạng thái:</label>
+                    <select id="statusFilter">
+                        <option value="all">Tất cả</option>
+                        <option value="pending">Đang thực hiện</option>
+                        <option value="completed">Đã hoàn thành</option>
+                        <option value="overdue">Quá hạn</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="sortBy">Sắp xếp theo:</label>
+                    <select id="sortBy">
+                        <option value="datetime">Thời gian</option>
+                        <option value="priority">Độ ưu tiên</option>
+                        <option value="title">Tiêu đề</option>
+                    </select>
+                </div>
+                <button id="clearCompleted" class="btn btn-danger">🗑️ Xóa đã hoàn thành</button>
+            </div>
+        </div>
+
+        <!-- Task List -->
+        <div class="card">
+            <h2>📋 Danh Sách Công Việc</h2>
+            <div id="taskList">
+                <div class="empty-state">
+                    <div class="icon">📝</div>
+                    <p>Chưa có công việc nào. Hãy thêm công việc đầu tiên!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class TaskManager {
+            constructor() {
+                this.tasks = this.loadTasks();
+                this.editingTaskId = null;
+                this.notificationInterval = null;
+                this.draggedElement = null;
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.renderTasks();
+                this.updateStatistics();
+                this.startNotificationChecker();
+                this.setDefaultDateTime();
+                this.requestNotificationPermission();
+            }
+
+            setupEventListeners() {
+                document.getElementById('taskForm').addEventListener('submit', (e) => this.handleSubmit(e));
+                document.getElementById('cancelBtn').addEventListener('click', () => this.cancelEdit());
+                document.getElementById('statusFilter').addEventListener('change', () => this.renderTasks());
+                document.getElementById('sortBy').addEventListener('change', () => this.renderTasks());
+                document.getElementById('clearCompleted').addEventListener('click', () => this.clearCompleted());
+            }
+
+            setDefaultDateTime() {
+                const now = new Date();
+                const today = now.toISOString().split('T')[0];
+                const currentTime = now.toTimeString().slice(0, 5);
+                
+                document.getElementById('taskDate').value = today;
+                document.getElementById('taskTime').value = currentTime;
+            }
+
+            requestNotificationPermission() {
+                if ('Notification' in window && Notification.permission === 'default') {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === 'granted') {
+                            this.showNotification('Đã bật thông báo cho ứng dụng!', 'success');
+                        }
+                    });
+                }
+            }
+
+            handleSubmit(e) {
+                e.preventDefault();
+                
+                const title = document.getElementById('taskTitle').value.trim();
+                const content = document.getElementById('taskContent').value.trim();
+                const date = document.getElementById('taskDate').value;
+                const time = document.getElementById('taskTime').value;
+                const priority = document.getElementById('taskPriority').value;
+
+                if (!title || !date || !time) {
+                    this.showNotification('Vui lòng điền đầy đủ thông tin!', 'error');
+                    return;
+                }
+
+                const datetime = new Date(`${date}T${time}`);
+                
+                if (this.editingTaskId) {
+                    this.updateTask(this.editingTaskId, { title, content, datetime, priority });
+                    this.showNotification('Cập nhật công việc thành công!', 'success');
+                } else {
+                    this.addTask({ title, content, datetime, priority });
+                    this.showNotification('Thêm công việc thành công!', 'success');
+                }
+
+                this.resetForm();
+            }
+
+            addTask(taskData) {
+                const task = {
+                    id: Date.now().toString(),
+                    title: taskData.title,
+                    content: taskData.content,
+                    datetime: taskData.datetime,
+                    priority: taskData.priority,
+                    status: 'pending',
+                    createdAt: new Date(),
+                    order: this.tasks.length,
+                    notified5min: false,
+                    notifiedExact: false
+                };
+
+                this.tasks.push(task);
+                this.saveTasks();
+                this.renderTasks();
+                this.updateStatistics();
+            }
+
+            updateTask(id, updates) {
+                const taskIndex = this.tasks.findIndex(task => task.id === id);
+                if (taskIndex !== -1) {
+                    this.tasks[taskIndex] = { ...this.tasks[taskIndex], ...updates };
+                    this.saveTasks();
+                    this.renderTasks();
+                    this.updateStatistics();
+                }
+            }
+
+            deleteTask(id) {
+                if (confirm('Bạn có chắc chắn muốn xóa công việc này?')) {
+                    this.tasks = this.tasks.filter(task => task.id !== id);
+                    this.saveTasks();
+                    this.renderTasks();
+                    this.updateStatistics();
+                    this.showNotification('Đã xóa công việc!', 'success');
+                }
+            }
+
+            editTask(id) {
+                const task = this.tasks.find(task => task.id === id);
+                if (task) {
+                    this.editingTaskId = id;
+                    
+                    document.getElementById('taskTitle').value = task.title;
+                    document.getElementById('taskContent').value = task.content;
+                    document.getElementById('taskPriority').value = task.priority;
+                    
+                    const date = task.datetime.toISOString().split('T')[0];
+                    const time = task.datetime.toTimeString().slice(0, 5);
+                    document.getElementById('taskDate').value = date;
+                    document.getElementById('taskTime').value = time;
+                    
+                    document.getElementById('submitBtn').textContent = '✏️ Cập Nhật';
+                    document.getElementById('cancelBtn').style.display = 'inline-block';
+                    
+                    document.getElementById('taskTitle').focus();
+                    document.getElementById('taskTitle').scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+
+            cancelEdit() {
+                this.editingTaskId = null;
+                this.resetForm();
+            }
+
+            resetForm() {
+                document.getElementById('taskForm').reset();
+                document.getElementById('submitBtn').textContent = '➕ Thêm Công Việc';
+                document.getElementById('cancelBtn').style.display = 'none';
+                this.editingTaskId = null;
+                this.setDefaultDateTime();
+            }
+
+            toggleTaskStatus(id) {
+                const task = this.tasks.find(task => task.id === id);
+                if (task) {
+                    task.status = task.status === 'completed' ? 'pending' : 'completed';
+                    this.saveTasks();
+                    this.renderTasks();
+                    this.updateStatistics();
+                    
+                    const message = task.status === 'completed' ? 
+                        'Đã đánh dấu hoàn thành!' : 'Đã đánh dấu chưa hoàn thành!';
+                    this.showNotification(message, 'success');
+                }
+            }
+
+            getFilteredAndSortedTasks() {
+                let filtered = [...this.tasks];
+                
+                const statusFilter = document.getElementById('statusFilter').value;
+                if (statusFilter !== 'all') {
+                    if (statusFilter === 'overdue') {
+                        const now = new Date();
+                        filtered = filtered.filter(task => 
+                            task.status === 'pending' && new Date(task.datetime) < now
+                        );
+                    } else {
+                        filtered = filtered.filter(task => task.status === statusFilter);
+                    }
+                }
+                
+                const sortBy = document.getElementById('sortBy').value;
+                filtered.sort((a, b) => {
+                    switch (sortBy) {
+                        case 'datetime':
+                            return new Date(a.datetime) - new Date(b.datetime);
+                        case 'priority':
+                            const priorityOrder = { high: 3, medium: 2, low: 1 };
+                            return priorityOrder[b.priority] - priorityOrder[a.priority];
+                        case 'title':
+                            return a.title.localeCompare(b.title);
+                        default:
+                            return a.order - b.order;
+                    }
+                });
+                
+                return filtered;
+            }
+
+            renderTasks() {
+                const taskList = document.getElementById('taskList');
+                const tasks = this.getFilteredAndSortedTasks();
+                
+                if (tasks.length === 0) {
+                    taskList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="icon">📝</div>
+                            <p>Không có công việc nào phù hợp với bộ lọc.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                taskList.innerHTML = tasks.map(task => this.createTaskHTML(task)).join('');
+                this.setupDragAndDrop();
+            }
+
+            createTaskHTML(task) {
+                const now = new Date();
+                const taskDate = new Date(task.datetime);
+                const isOverdue = task.status === 'pending' && taskDate < now;
+                const timeUntil = this.getTimeUntil(taskDate);
+                
+                const priorityClass = `priority-${task.priority}`;
+                const statusClass = task.status === 'completed' ? 'completed' : '';
+                const overdueClass = isOverdue ? 'overdue' : '';
+                
+                return `
+                    <div class="task-item ${priorityClass} ${statusClass} ${overdueClass}" 
+                         data-task-id="${task.id}" draggable="true">
+                        <div class="task-header">
+                            <div class="task-title ${statusClass}">
+                                <input type="checkbox" class="checkbox" 
+                                       ${task.status === 'completed' ? 'checked' : ''}
+                                       onchange="taskManager.toggleTaskStatus('${task.id}')">
+                                <h3>${task.title}</h3>
+                                <span class="priority-badge ${priorityClass}">
+                                    ${this.getPriorityText(task.priority)}
+                                </span>
+                            </div>
+                            
+                            <div class="task-actions">
+                                <button onclick="taskManager.editTask('${task.id}')" title="Chỉnh sửa">✏️</button>
+                                <button onclick="taskManager.deleteTask('${task.id}')" title="Xóa">🗑️</button>
+                            </div>
+                        </div>
+                        
+                        ${task.content ? `<div class="task-content">${task.content}</div>` : ''}
+                        
+                        <div class="task-meta ${isOverdue ? 'overdue' : ''}">
+                            <div>🕒 ${this.formatDateTime(taskDate)}</div>
+                            ${isOverdue ? '<div style="color: #dc3545; font-weight: bold;">⚠️ Quá hạn</div>' : ''}
+                            ${!isOverdue && task.status === 'pending' ? `<div style="color: #667eea;">⏰ ${timeUntil}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+
+            setupDragAndDrop() {
+                const taskItems = document.querySelectorAll('.task-item');
+                
+                taskItems.forEach(item => {
+                    item.addEventListener('dragstart', (e) => {
+                        this.draggedElement = item;
+                        item.classList.add('sortable-chosen');
+                        e.dataTransfer.effectAllowed = 'move';
+                    });
+                    
+                    item.addEventListener('dragend', () => {
+                        item.classList.remove('sortable-chosen');
+                        document.querySelectorAll('.task-item').forEach(el => {
+                            el.classList.remove('sortable-ghost');
+                        });
+                    });
+                    
+                    item.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                        e.dataTransfer.dropEffect = 'move';
+                    });
+                    
+                    item.addEventListener('dragenter', (e) => {
+                        e.preventDefault();
+                        if (item !== this.draggedElement) {
+                            item.classList.add('sortable-ghost');
+                        }
+                    });
+                    
+                    item.addEventListener('dragleave', () => {
+                        item.classList.remove('sortable-ghost');
+                    });
+                    
+                    item.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        if (item !== this.draggedElement) {
+                            this.reorderTasks(this.draggedElement.dataset.taskId, item.dataset.taskId);
+                        }
+                        item.classList.remove('sortable-ghost');
+                    });
+                });
+            }
+
+            reorderTasks(draggedId, targetId) {
+                const draggedTask = this.tasks.find(t => t.id === draggedId);
+                const targetTask = this.tasks.find(t => t.id === targetId);
+                
+                if (draggedTask && targetTask) {
+                    const draggedIndex = this.tasks.indexOf(draggedTask);
+                    const targetIndex = this.tasks.indexOf(targetTask);
+                    
+                    this.tasks.splice(draggedIndex, 1);
+                    this.tasks.splice(targetIndex, 0, draggedTask);
+                    
+                    this.tasks.forEach((task, index) => {
+                        task.order = index;
+                    });
+                    
+                    this.saveTasks();
+                    this.renderTasks();
+                    this.showNotification('Đã cập nhật thứ tự công việc!', 'success');
+                }
+            }
+
+            getPriorityText(priority) {
+                const texts = {
+                    high: 'Cao',
+                    medium: 'Trung bình',
+                    low: 'Thấp'
+                };
+                return texts[priority];
+            }
+
+            formatDateTime(date) {
+                return new Intl.DateTimeFormat('vi-VN', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }).format(date);
+            }
+
+            getTimeUntil(date) {
+                const now = new Date();
+                const diff = date - now;
+                
+                if (diff < 0) return 'Đã quá hạn';
+                
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                
+                if (days > 0) return `Còn ${days} ngày ${hours} giờ`;
+                if (hours > 0) return `Còn ${hours} giờ ${minutes} phút`;
+                return `Còn ${minutes} phút`;
+            }
+
+            updateStatistics() {
+                const now = new Date();
+                const total = this.tasks.length;
+                const completed = this.tasks.filter(task => task.status === 'completed').length;
+                const pending = this.tasks.filter(task => task.status === 'pending').length;
+                const overdue = this.tasks.filter(task => 
+                    task.status === 'pending' && new Date(task.datetime) < now
+                ).length;
+
+                document.getElementById('totalTasks').textContent = total;
+                document.getElementById('completedTasks').textContent = completed;
+                document.getElementById('pendingTasks').textContent = pending;
+                document.getElementById('overdueTasks').textContent = overdue;
+            }
+
+            clearCompleted() {
+                const completedCount = this.tasks.filter(task => task.status === 'completed').length;
+                if (completedCount === 0) {
+                    this.showNotification('Không có công việc đã hoàn thành để xóa!', 'info');
+                    return;
+                }
+
+                if (confirm(`Bạn có chắc chắn muốn xóa ${completedCount} công việc đã hoàn thành?`)) {
+                    this.tasks = this.tasks.filter(task => task.status !== 'completed');
+                    this.saveTasks();
+                    this.renderTasks();
+                    this.updateStatistics();
+                    this.showNotification(`Đã xóa ${completedCount} công việc đã hoàn thành!`, 'success');
+                }
+            }
+
+            startNotificationChecker() {
+                this.notificationInterval = setInterval(() => {
+                    this.checkNotifications();
+                }, 60000);
+                
+                this.checkNotifications();
+            }
+
+            checkNotifications() {
+                const now = new Date();
+                
+                this.tasks.forEach(task => {
+                    if (task.status === 'pending') {
+                        const taskTime = new Date(task.datetime);
+                        const timeDiff = taskTime - now;
+                        
+                        if (timeDiff > 0 && timeDiff <= 5 * 60 * 1000 && !task.notified5min) {
+                            this.showTaskNotification(task, '5 phút nữa');
+                            task.notified5min = true;
+                            this.saveTasks();
+                        }
+                        
+                        if (timeDiff <= 0 && timeDiff > -60000 && !task.notifiedExact) {
+                            this.showTaskNotification(task, 'ngay bây giờ');
+                            task.notifiedExact = true;
+                            this.saveTasks();
+                        }
+                    }
+                });
+            }
+
+            showTaskNotification(task, timeText) {
+                if (Notification.permission === 'granted') {
+                    new Notification(`🔔 Công việc: ${task.title}`, {
+                        body: `Thời gian: ${timeText}`,
+                        icon: '📅'
+                    });
+                }
+                
+                this.showNotification(
+                    `🔔 Công việc "${task.title}" sẽ bắt đầu ${timeText}!`, 
+                    'warning',
+                    5000
+                );
+            }
+
+            showNotification(message, type = 'info', duration = 3000) {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>${message}</span>
+                        <button onclick="this.parentElement.parentElement.remove()" 
+                                style="background: none; border: none; color: inherit; font-size: 1.2rem; cursor: pointer; margin-left: 10px;">
+                            ✕
+                        </button>
+                    </div>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, duration);
+            }
+
+            loadTasks() {
+                try {
+                    const saved = localStorage.getItem('workScheduleTasks');
+                    if (saved) {
+                        const tasks = JSON.parse(saved);
+                        return tasks.map(task => ({
+                            ...task,
+                            datetime: new Date(task.datetime),
+                            createdAt: new Date(task.createdAt)
+                        }));
+                    }
+                } catch (error) {
+                    console.error('Error loading tasks:', error);
+                }
+                return [];
+            }
+
+            saveTasks() {
+                try {
+                    localStorage.setItem('workScheduleTasks', JSON.stringify(this.tasks));
+                } catch (error) {
+                    console.error('Error saving tasks:', error);
+                    this.showNotification('Lỗi khi lưu dữ liệu!', 'error');
+                }
+            }
+        }
+
+        const taskManager = new TaskManager();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9662b6d943c0fdb7',t:'MTc1MzY4ODI3OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

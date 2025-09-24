@@ -1,0 +1,169 @@
+* {
+    border: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to bottom, #667eea, #b174ef);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.cal_container {
+    background-color: white;
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 400px;
+    width: 100%;
+}
+
+.title {
+    text-align: center;
+    color: #333;
+    font-size: 25px;
+    color: #2d2a2a;
+    margin-bottom: 20px;
+    margin-top: 0px;
+}
+
+.display {
+    background-color: rgb(246, 249, 249);
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: right;
+    font-size: 24px;
+}
+
+.button {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.btn {
+    padding: 20px;
+    background-color: #e9ecef;
+    border-radius: 15px;
+    font-size: 17px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.control_buttons {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 20px;
+
+}
+
+.btn-control {
+    padding: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 600;
+    width: 100%;
+
+}
+
+.btn-reset {
+    background-color: rgb(135, 219, 149);
+}
+
+.btn-reset:hover {
+    background-color: rgb(105, 189, 119);
+}
+
+.btn-history {
+    background-color: rgb(255, 204, 0);
+}
+
+.btn-history:hover {
+    background-color: rgb(255, 170, 0);
+}
+
+.btn-clear {
+    background-color: rgb(233, 43, 43);
+}
+
+.btn-operator {
+    background-color: #667eea;
+}
+
+.btn-number_0 {
+    background-color: #e9ecef;
+    color: black;
+    grid-column: span 2;
+
+}
+
+.btn-equals {
+    background-color: #28a745;
+    color: white;
+
+}
+
+.history_panner {
+    background-color: #e9ecef;
+    border-radius: 10px;
+    padding: 20px;
+    max-height: 300px;
+    overflow-y: auto;
+    display: none;
+}
+
+.history_panner.show {
+    display: block;
+}
+
+.history-title {
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #333;
+    text-align: center;
+}
+
+.history-item {
+    padding: 8px 12px;
+    background: white;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    font-family: monospace;
+    font-size: 14px;
+    color: #555;
+    border-left: 4px solid #007bff;
+}
+
+.history-empty {
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+}
+
+.btn-clear-history {
+    width: 100%;
+    padding: 8px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn-clear-history:hover {
+    background: #c82333;
+}

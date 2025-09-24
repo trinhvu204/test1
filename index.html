@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>maytinh.com</title>
+    <link rel="stylesheet" href="/study/style.css">
+</head>
+
+<body>
+    
+    <div class="cal_container">
+        <h1 class="title">Máy tính</h1>
+        <div class="display" id="display">0</div>
+        <div class = "control_buttons">
+            <button class="btn-control btn-reset" onclick="resetCalculator()">Reset</button>
+            <button class="btn-control btn-history" onclick="toggleHistory()">Lịch sử</button>
+        </div>
+        <div class ="button">
+            <button class ="btn btn-clear" onclick="clearDisplay()">C</button>
+            <button class ="btn btn-operator" onclick="inputOperator('/')">/</button>
+            <button class ="btn btn-operator" onclick="inputOperator('*')">×</button>
+            <button class ="btn btn-clear" onclick="deleteLast()">Xóa</button>
+            <button class ="btn btn-number" onclick="inputNumber('7')">7</button>
+            <button class ="btn btn-number" onclick="inputNumber('8')">8</button>
+            <button class ="btn btn-number" onclick="inputNumber('9')">9</button>
+            <button class ="btn btn-operator" onclick="inputOperator('-')">-</button>
+            <button class ="btn btn-number" onclick="inputNumber('4')">4</button>
+            <button class ="btn btn-number" onclick="inputNumber('5')">5</button>
+            <button class ="btn btn-number" onclick="inputNumber('6')">6</button>
+            <button class ="btn btn-operator" onclick="inputOperator('+')">+</button>
+            <button class ="btn btn-number" onclick="inputNumber('1')">1</button>
+            <button class ="btn btn-number" onclick="inputNumber('2')">2</button>
+            <button class ="btn btn-number" onclick="inputNumber('3')">3</button>
+            <button class ="btn btn-number_0" onclick="inputNumber('0')">0</button>
+            <button class ="btn btn-number" onclick="inputNumber('.')">.</button>
+            <button class ="btn btn-equals" onclick="calculate('=')">=</button>
+        </div>
+        <div class ="history_panner" id ="history_panner">      
+            <div class="history-title">Lịch sử</div>
+            <div id="historyList"></div>
+            <button class="btn-clear-history" onclick="clearHistory()">Xóa lịch sử</button>
+    </div>
+
+    <script src="/study/script.js"></script>
+</body>
+
+</html>
